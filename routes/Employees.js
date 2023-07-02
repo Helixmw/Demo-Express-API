@@ -94,7 +94,7 @@ router.get('/:id', async(req,res) => {
             let rs = await Employee.findById(req.params.id);
             res.status(200).json({success: rs});
         }catch(e){
-            res.status(404).json({error: "Employee not found."});
+            res.status(404).json({error: "Employee not found.."});
         }
     }catch(e){
         res.status(500).json({error: "Something went wrong. Please try later"});
