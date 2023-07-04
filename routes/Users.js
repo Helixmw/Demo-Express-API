@@ -114,7 +114,7 @@ router.post('/login', loginValidation , async(req,res) => {
 });
 
 //Logout
-router.get('/logout',(req,res) => {
+router.get('/logout', (req,res) => {
     try{
         res.cookie('jwt','')
         .status(200)
@@ -122,6 +122,102 @@ router.get('/logout',(req,res) => {
     }catch(e){
         res.status(500).json({error: e.message});
     }  
+});
+
+//User Profile
+router.get('/profile', verifyToken , async(req,res)=>{
+    try{
+        try{
+        let user = await User.findById(req.userId);
+        if(user == null){
+            res.status(404).json({error: "Sorry, cannot find user."})
+        }else{
+            res.status(200).json(user);
+        }
+        }catch(e){
+    res.status(500).json({error: "Something went wrong. Please try again later"});
+        }
+    }catch(e){
+        res.status(500).json({error: "Something went wrong. Please try again later"});
+    }
+});
+
+
+//Edit User Profile
+router.get('/profile/edit', verifyToken , async(req,res)=>{
+    try{
+        try{
+        let user = await User.findById(req.userId);
+        if(user == null){
+            res.status(404).json({error: "Sorry, cannot find user."})
+        }else{
+            const salt = await bcrypt.genSalt();
+            let password = await bcrypt.hash(req.body.password, salt);
+            user.username = req.body.username;
+            user.email = req.body.email;
+            user.password = password;
+            let rs = await user.save();
+            res.status(200).json(rs);
+        }
+        }catch(e){
+    res.status(500).json({error: "Something went wrong. Please try again later"});
+        }
+    }catch(e){
+        res.status(500).json({error: "Something went wrong. Please try again later"});
+    }
+});
+
+//Assign Role
+router.get('/user/role/:id', verifyToken , async(req,res)=>{
+    try{
+        try{
+        let user = await User.findById(req.params.id);
+        if(user == null){
+            res.status(404).json({error: "Sorry, cannot find user."})
+        }else{
+            user.role = req.body.role;
+            let rs = await user.save();
+            res.status(200).json(rs);
+        }
+        }catch(e){
+    res.status(500).json({error: "Something went wrong. Please try again later"});
+        }
+    }catch(e){
+        res.status(500).json({error: "Something went wrong. Please try again later"});
+    }
+});
+
+
+//Find specific user
+router.get('/profile/:id', verifyToken , async(req,res)=>{
+    try{
+        try{
+        let user = await User.findById(req.params.id);
+        if(user == null){
+            res.status(404).json({error: "Sorry, cannot find user."})
+        }else{
+            res.status(200).json(user);
+        }
+        }catch(e){
+    res.status(500).json({error: "Something went wrong. Please try again later"});
+        }
+    }catch(e){
+        res.status(500).json({error: "Something went wrong. Please try again later"});
+    }
+});
+
+//Delete or deactivate
+router.delete('/delete', verifyToken, async(req,res) => {
+    try{
+        try{
+            await User.findByIdAndDelete(req.userId);
+            res.cookie('jwt','').status(200).json({success: "User deleted"});
+        }catch(e){
+            res.status(500).json({error: "Something went wrong. Please try again later"});
+        }
+    }catch(e){
+        res.status(500).json({error: "Something went wrong. Please try again later"});
+    }
 });
 
 
