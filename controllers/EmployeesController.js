@@ -1,5 +1,5 @@
-const {check, validationResult} =require('express-validator');
-//const Employee = require('../models/Employee');
+const {check, validationResult} = require('express-validator');
+const Employee = require('../models/Employee');
 
 async function getAllEmployees(req, res){
     try{

@@ -5,7 +5,7 @@ const {check, validationResult} =require('express-validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-const { editProfile, getUsers, signUp, login, logout, userProfile, assignRole, specificUser, deleteUser } = require('../controllers/AuthController');
+const { editProfile, getUsers, signUp, login, logout, userProfile, assignRole, specificUser, deleteUser, test } = require('../controllers/AuthController.js');
 
 const formValidation = [
     check('username').notEmpty().withMessage('Username is required'),
@@ -73,6 +73,6 @@ router.get('/profile/:id', verifyToken , specificUser);
 //Delete or deactivate
 router.delete('/delete', verifyToken, deleteUser);
 
-
+router.get('/test', test);
 
 module.exports = router;

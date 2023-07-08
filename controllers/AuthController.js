@@ -71,10 +71,10 @@ async function login(req,res){
                 }
             }
         }catch(e){
-            res.status(500).json({error: e.message});
+            res.status(500).json({error: "Invalid Entry: " + e.message});
         }
     }catch(e){
-        res.status(500).json({error: e.message});
+        res.status(500).json({error: "Server problem: " + e.message});
     }
 }
 
@@ -185,4 +185,8 @@ async function deleteUser(req,res){
     }
 }
 
-module.exports = { editProfile, getUsers, signUp, login, logout, userProfile, assignRole, specificUser, deleteUser }
+function test(req,res){
+    res.send("success");
+}
+
+module.exports = { editProfile, getUsers, signUp, login, logout, userProfile, assignRole, specificUser, deleteUser,test }
